@@ -1,19 +1,7 @@
 const express = require("express");
 const hotelController = require("../controllers/hotelController");
-const multer = require("multer");
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const cloudinary = require("../config/cloudinary");
+const { upload } = require("../config/cloudinary");
 
-
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: "hotel_images",
-    format: async (req, file) => "jpg",
-    public_id: (req, file) => file.originalname.split(".")[0],
-  },
-});
-const upload = multer({ storage: storage });
 const router = express.Router();
 
 router.post("/add-hotel", upload.array("images"), hotelController.addHotel);

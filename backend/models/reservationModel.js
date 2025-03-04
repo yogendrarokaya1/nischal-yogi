@@ -11,6 +11,18 @@ const Reservation = {
   delete: async (reservation_id) => {
     return pool.query("DELETE FROM reservation WHERE reservation_id = $1", [reservation_id]);
   },
+  checkReservationConflictForProductPage: async (room_id, check_in_date, check_out_date) => {
+    return await pool.query(
+      `SELECT * FROM reservation 
+       WHERE room_id = $1 
+       AND (
+         (check_in_date <= $2 AND check_out_date > $2) OR
+         (check_in_date < $3 AND check_out_date >= $3) OR
+         (check_in_date >= $2 AND check_out_date <= $3)
+       )`,
+      [room_id, check_in_date, check_out_date]
+    );
+  },
   findBySellerEmail: async (seller_email) => {
     return pool.query(
       `SELECT 

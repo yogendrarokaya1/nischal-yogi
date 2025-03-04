@@ -1,16 +1,18 @@
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587, 
+  secure: false, 
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.EMAIL_USER, // Your email
+    pass: process.env.EMAIL_PASS, // Your password or App Password
   },
 });
 
 const sendReservationEmail = ({ hotel_name, seller_email, room_number, user_phone, check_in_date, check_out_date }) => {
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+    from:"",
     to: seller_email,
     subject: "🔔 New Reservation Confirmation",
     html: `

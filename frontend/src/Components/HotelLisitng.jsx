@@ -4,7 +4,7 @@ import amenitiesList from "./Ammenities";
 
 const HotelListing = () => {
   const { sessionData } = useSession();
-
+  const [loading, setLoading] = useState(false);
   const [hotelDetails, setHotelDetails] = useState({
     seller_email: "",
     hotel_name: "",
@@ -116,6 +116,8 @@ const HotelListing = () => {
       formData.append("images", image);
     });
 
+    setLoading(true)
+
     try {
       const response = await fetch("http://localhost:3008/hotels/add-hotel", {
         method: "POST",
@@ -129,6 +131,9 @@ const HotelListing = () => {
       }
     } catch (error) {
       console.error("Error submitting hotel listing:", error);
+    }
+    finally{
+      setLoading(false)
     }
   };
 
@@ -260,9 +265,7 @@ const HotelListing = () => {
         />
       </div>
 
-      <button className="lp_button" onClick={handleSubmit}>
-        Add listing
-      </button>
+      <button className="lp_button" onClick={handleSubmit} disabled={loading}>{loading ? "Adding..." : "Add Listing"}</button>
     </div>
   );
 };

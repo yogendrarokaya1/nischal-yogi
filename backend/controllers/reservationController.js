@@ -6,6 +6,10 @@ const reservationController = {
     const { hotel_name, seller_email, hotel_id, room_number, room_id, user_phone, check_in_date, check_out_date } = req.body;
 
     try {
+      const conflict = await Reservation.checkReservationConflictForProductPage(room_id, check_in_date, check_out_date)
+      if (conflict.rows.length > 0) {
+        return res.status(400).json({ message: "Unavailable for picked dates" });
+      }
       await Reservation.add({ hotel_id, user_phone, room_id, room_number, check_in_date, check_out_date });
       sendReservationEmail({ hotel_name, seller_email, room_number, user_phone, check_in_date, check_out_date });
       res.status(201).json({ message: "Reservation successful!" });

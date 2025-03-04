@@ -10,7 +10,7 @@ const Hotel = {
     );
   },
   addImage: async (hotel_id, image_url) => {
-    return pool.query("INSERT INTO Hotel_image (hotel_id, image_url) VALUES ($1, $2)", [hotel_id, image_url]);
+    return await pool.query("INSERT INTO Hotel_image (hotel_id, image_url) VALUES ($1, $2)", [hotel_id, image_url]);
   },
   findBySellerEmail: async (seller_email) => {
     return pool.query(
@@ -44,14 +44,14 @@ const Hotel = {
       [hotel_name, hotel_location, JSON.stringify(amenities), hotel_id, seller_email]
     );
   },
-  delete: async (client, hotel_id, seller_email) => {
-    return client.query(
+  delete: async (hotel_id, seller_email) => {
+    return pool.query(
       "DELETE FROM Hotel WHERE hotel_id = $1 AND seller_email = $2 RETURNING hotel_id",
       [hotel_id, seller_email]
     );
   },
-  deleteImages: async (client, hotel_id) => {
-    return client.query("DELETE FROM Hotel_image WHERE hotel_id = $1", [hotel_id]);
+  deleteImages: async (hotel_id) => {
+    return pool.query("DELETE FROM Hotel_image WHERE hotel_id = $1", [hotel_id]);
   },
   getLocationAndName: async () => {
     return pool.query("SELECT hotel_location, hotel_name FROM Hotel");

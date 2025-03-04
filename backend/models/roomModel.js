@@ -16,8 +16,8 @@ const Room = {
       [price, room_number, room_capacity, hotel_id]
     );
   },
-  deleteByHotelId: async (client, hotel_id) => {
-    return client.query("DELETE FROM Room WHERE hotel_id = $1", [hotel_id]);
+  deleteByHotelId: async (hotel_id) => {
+    return pool.query("DELETE FROM Room WHERE hotel_id = $1", [hotel_id]);
   },
 };
 
